@@ -1,7 +1,8 @@
 "use client";
+import ErrorMessage from "@/app/components/ErrorMessage";
 import issueSchema from "@/app/validationSchemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Button, Callout, Text, TextField } from "@radix-ui/themes";
+import { Button, Callout, TextField } from "@radix-ui/themes";
 import axios from "axios";
 import "easymde/dist/easymde.min.css";
 import { useRouter } from "next/navigation";
@@ -10,14 +11,20 @@ import { Controller, useForm } from "react-hook-form";
 import SimpleMDE from "react-simplemde-editor";
 import { z } from "zod";
 
-type IssueForm = z.infer<typeof issueSchema>
+type IssueForm = z.infer<typeof issueSchema>;
 
-export default  function NewIssuePage() {
+export default function NewIssuePage() {
   const router = useRouter();
-  const { register, formState, reset, control, handleSubmit } =
-    useForm<IssueForm>({
-      resolver:zodResolver(issueSchema)
-    });
+  const {
+    register,
+    formState: { errors },
+    reset,
+    control,
+    handleSubmit,
+  } = useForm<IssueForm>({
+    resolver: zodResolver(issueSchema),
+  });
+
   const [error, setError] = useState("");
 
   async function onSubmit(data: IssueForm) {
@@ -26,29 +33,28 @@ export default  function NewIssuePage() {
       reset();
 
       router.push("/issues");
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    }catch (err) {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    } catch (err) {
       setError("An Unexpected error has jus occured");
     }
   }
- 
+
   return (
     <div className="max-w-xl space-y-3 mx-auto">
       {error && (
         <Callout.Root color="red">
-          <Callout.Text>
-            {error}
-          </Callout.Text>
+          <Callout.Text>{error}</Callout.Text>
         </Callout.Root>
       )}
       <form
         className="space-y-3"
-        onSubmit={handleSubmit(data => onSubmit(data))}>
+        onSubmit={handleSubmit((data) => onSubmit(data))}>
         <TextField.Root
           placeholder="Title"
           {...register("title", { required: true })}
         />
-        {formState.errors.title && <Text color="red">Title is required</Text>}
+
+        <ErrorMessage>{errors.title?.message}</ErrorMessage>
 
         <Controller
           name="description"
@@ -58,7 +64,7 @@ export default  function NewIssuePage() {
           )}
         />
 
-        {formState.errors.description && <Text color="red" as='p'>Description is required</Text> }
+        <ErrorMessage>{errors.description?.message}</ErrorMessage>
         <Button>Submit New Issue</Button>
       </form>
     </div>
