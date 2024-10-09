@@ -14,17 +14,19 @@ export default async function IssueDetailPage({ params }: Props) {
 
   if (!issue) notFound();
 
+ 
+
   return (
     <div>
       <Heading>{issue.title}</Heading>
-      <Flex gap={'4'} my={'2'}>
+      <Flex gap={"4"} my={"2"}>
         <IssueStatusBadge status={issue.status} />
 
         <Text>{issue.createtAt.toDateString()}</Text>
       </Flex>
-          <Card className="prose " mt={'4'}>
-          <ReactMarkdown >{issue.description}</ReactMarkdown>    
-          </Card>
+      <Card className="prose " mt={"4"}>
+        <ReactMarkdown>{issue.description}</ReactMarkdown>
+      </Card>
     </div>
   );
 }

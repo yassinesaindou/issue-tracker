@@ -14,7 +14,7 @@ import { z } from "zod";
 
 type IssueForm = z.infer<typeof issueSchema>;
 
-export default function NewIssuePage() {
+export  default   function NewIssuePage() {
   const router = useRouter();
   const {
     register,
@@ -42,6 +42,7 @@ export default function NewIssuePage() {
       setError("An Unexpected error has jus occured");
     }
   }
+  
 
   return (
     <div className="max-w-xl space-y-3 mx-auto">
