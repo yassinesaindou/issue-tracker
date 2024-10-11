@@ -37,7 +37,15 @@ export default function IssueForm({ issue }: Props) {
   async function onSubmit(data: IssueFormData) {
     try {
       setIsSubmitting(true);
-      await axios.post("/api/issues", data);
+
+      if(!issue)
+        await axios.post("/api/issues", data);
+
+
+      if (issue) {
+        await axios.patch(`/api/issues/${issue.id}`, data);
+      }
+     
       reset();
 
       router.push("/issues");
@@ -77,7 +85,7 @@ export default function IssueForm({ issue }: Props) {
         />
 
         <ErrorMessage>{errors.description?.message}</ErrorMessage>
-        <Button disabled={isSubmitting}>{isSubmitting ? <Spinner /> : "Submit New Issue"} </Button>
+        <Button disabled={isSubmitting}> {isSubmitting ? <Spinner /> : "Submit"} </Button>
       </form>
     </div>
   );
