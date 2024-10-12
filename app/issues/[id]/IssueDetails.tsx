@@ -16,7 +16,7 @@ export default function IssueDetails({ issue }: Props) {
 
         <Text>{issue.createtAt.toDateString()}</Text>
       </Flex>
-      <Card className="prose " mt={"4"}>
+      <Card className="prose min-w-full" mt={"4"}>
         <ReactMarkdown>{issue.description}</ReactMarkdown>
       </Card>
     </>
